@@ -116,6 +116,6 @@ endif()
 #
 configure_file(
   ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
-  include/version.h
+  include/${PROJECT_NAME_LOWERCASE}/version.h
   @ONLY
 )
