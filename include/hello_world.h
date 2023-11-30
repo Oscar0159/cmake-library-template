@@ -1,5 +1,5 @@
-#ifndef CMAKE_LIBRARY_TEMPLATE_HELLO_WORLD_H_
-#define CMAKE_LIBRARY_TEMPLATE_HELLO_WORLD_H_
+#ifndef HELLO_WORLD_H_
+#define HELLO_WORLD_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,4 +17,4 @@ EXPORT char* hello_world();
 }
 #endif
 
-#endif // CMAKE_LIBRARY_TEMPLATE_HELLO_WORLD_H_
+#endif // HELLO_WORLD_H_
