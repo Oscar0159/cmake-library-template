@@ -110,3 +110,14 @@ endif()
 # if (${PROJECT_NAME}_BUILD_DOCS)
 #     # add_subdirectory(docs)
 # endif()
+
+
+
+#
+# 產生專案版本標頭檔案
+#
+configure_file(
+  ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
+  include/version.h
+  @ONLY
+)
