@@ -56,11 +56,11 @@ include(cmake/SourcesAndHeaders.cmake)
 if(${PROJECT_NAME}_BUILD_HEADERS_ONLY)
     add_library(${PROJECT_NAME} INTERFACE)
 elseif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
-    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES})
+    add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS})
 else()
-    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES})
+    add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS})
 endif()
-target_include_directories(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_HEADER_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_INCLUDE_DIR})
 
 #
 # 設定專案輸出目錄
