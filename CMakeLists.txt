@@ -89,19 +89,13 @@ include(cmake/CompilerWarnings.cmake)
 set_project_warnings(${PROJECT_NAME})
 
 #
-# 產生單元測試
+# 產生專案版本標頭檔案
 #
-if (${PROJECT_NAME}_BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(test)
-endif()
-
-#
-# 產生專案範例
-#
-if (${PROJECT_NAME}_BUILD_EXAMPLES)
-    add_subdirectory(example)
-endif()
+configure_file(
+  ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
+  include/${PROJECT_NAME_LOWERCASE}/version.h
+  @ONLY
+)
 
 #
 # 產生專案文件
@@ -112,10 +106,16 @@ endif()
 # endif()
 
 #
-# 產生專案版本標頭檔案
+# 產生專案範例
 #
-configure_file(
-  ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
-  include/${PROJECT_NAME_LOWERCASE}/version.h
-  @ONLY
-)
+if (${PROJECT_NAME}_BUILD_EXAMPLES)
+    add_subdirectory(example)
+endif()
+
+#
+# 產生單元測試
+#
+if (${PROJECT_NAME}_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()
