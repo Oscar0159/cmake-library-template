@@ -13,6 +13,8 @@ extern "C" {
 
 EXPORT char* hello_world();
 
+EXPORT char* hello_world_foo();
+
 #ifdef __cplusplus
 }
 #endif
