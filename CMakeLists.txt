@@ -71,7 +71,7 @@ elseif(${PROJECT_NAME}_BUILD_SHARED_LIBS)
 else()
     add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS})
 endif()
-target_include_directories(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${${PROJECT_NAME}_INCLUDE_DIR}>)
 
 #
 # 設定專案輸出目錄
@@ -80,6 +80,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    DEBUG_POSTFIX "_d"
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    PUBLIC_HEADER "${${PROJECT_NAME}_INCLUDES}"
 )
 
 #
@@ -95,6 +99,71 @@ configure_file(
   ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
   include/${PROJECT_NAME_LOWERCASE}/version.h
   @ONLY
+)
+
+#
+# 產生專案安裝檔案
+#
+configure_file(
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/version.h.in
+    include/${PROJECT_NAME_LOWERCASE}/version.h
+    @ONLY
+)
+
+#
+# 安裝專案
+#
+include(GNUInstallDirs)
+
+install(
+    TARGETS
+    ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION include/${PROJECT_NAME_LOWERCASE}
+    PUBLIC_HEADER DESTINATION include/${PROJECT_NAME_LOWERCASE}
+)
+
+install(
+    EXPORT
+    ${PROJECT_NAME}Targets
+    FILE ${PROJECT_NAME}Targets.cmake
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(
+    DIRECTORY
+    ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME_LOWERCASE}
+    DESTINATION
+    include
+)
+
+#
+# Quick `ConfigVersion.cmake` creation
+#
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    INSTALL_DESTINATION
+    ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+write_basic_package_version_file(
+    ${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install( FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION
+    ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 #
